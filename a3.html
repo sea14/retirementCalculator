@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+	<head>
+	<title>Retirement Calculator</title>
+
+
+	<link rel="stylesheet" type="text/css" href="a3.css">
+	<script type="text/javascript" src="a3.js"></script>
+	</head>
+
+
+	<body>
+
+	<div id="basic">
+	<h3>Basic Retirement Information:</h3>
+	<form>
+	<ul>	
+		<li>Year of Birth:<input type="text" id="birthYear"></input><li>
+		<li>Current Savings:<input type="text" id="current"></input></li>
+		<li>Expected Retirement Amount:<input type="text" id="expectedRA"></input></li>
+		<li>Life Expectancy:<input type="text" id="lifeExpectancy"></input></li>
+	</ul>
+	</div>
+	</form>
+
+
+	<div id="scenario">
+
+	<!--for specific scenarios-->
+	<h3>Specify an Individual Scenario:</h3>
+	<form>
+	<ul>
+		<li>Scenario Name:<input type="text" id="scenarioName"></input></li>
+		<li>Work Return Investment Rate:<input type="text" id="work"></input></li>
+		<li>Retirement Investment Rate:<input type="text" id="retire"></input></li>
+		<li>Desired Yearly Income:<input type="text" id="yearly"></input></li>
+	</ul>
+	</div>
+
+	<hr>
+	<input type="button" onclick="basicInput(); scenarioInput();"value="Calculate"></input>
+	</form>
+	</div>
+
+	</body>
+
+
+
+</html>
