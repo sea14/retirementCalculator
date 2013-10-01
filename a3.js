@@ -9,23 +9,30 @@ When the user clicks calculate, we run this function.*/
 function basicInput(){
 
 	var currentYear = new Date().getFullYear();
-	//check that birth year is positive and in the past
-	if(document.getElementById("birthYear").value>0 && document.getElementById("birthYear").value < currentYear){	
+	//check that birth year is positive
+	if(document.getElementById("birthYear").value>0){
+
+		//check that birth year is in the past
+		if(document.getElementById("birthYear").value < currentYear){	
+	
 		this.birthYear = document.getElementById("birthYear").value;		
 		var greaterNum = currentYear - document.getElementById("birthYear").value;
 		return greaterNum;
+		}
 	}else{
 	
 		document.writeln("Please provide a positive birth year that is in the past.");
 		var greaterNum = 0;
 	}
 
-	//check that current savings are a number
-	//if(isNaN(document.getElementById("current").value)){
-	//	alert("Please enter a numerical value for savings.");
-	//}else{
-	//		 this.currentSavings = document.getElementById("current").value;
-	//}
+	/*//check that current savings are a number
+	var testSave = document.getElementById("current").value;
+
+	if(isNaN(testSave)){
+		alert("Please enter a numerical value for savings.");
+	}else{
+			 this.currentSavings = testSave;
+	}
 
 	//check that the expected retirement age is a number and is in the future
 	//we subtract the current year from the user's year of birth to get the number
@@ -42,15 +49,17 @@ function basicInput(){
 	}else{
 		document.writeln("Please provide a numerical retirement age that is in the future.");
 	}
+	*/
+
 
 	//check that life expectancy is a number and that it is in the future
 	//beyond the expected retirement age
-	if(isNaN(document.getElementById("lifeExpectancy").value) || document.getElementById("lifeExpectancy").value - expectedRA){
+	/*	if(isNaN(document.getElementById("lifeExpectancy").value) || document.getElementById("lifeExpectancy").value - expectedRA){
 		document.writeln("Your life expectancy must be a number, in the future, and should be beyond the expected retirement age.");
 	}else{
 		this.lifeExpectancy = document.getElementById("lifeExpectancy").value;
 
-	}
+	} */
 
 }
 
@@ -84,7 +93,7 @@ function scenarioInput(){
 
 	//now we check that the desired yearly income is a positive value
 	if(document.getElementById("yearly").value<=0){
-		document.writeln("Please enter a positive yearly income.");
+		document.getElementById("errors").innerHTML = "Please enter a positive yearly income.");
 	}else{
 		this.yearlyIncome = document.getElementById("yearly").value;
 	}
