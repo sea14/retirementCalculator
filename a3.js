@@ -159,13 +159,13 @@ function calculate(lifeExpectancy, expectedRA, current, birthYear, currentYear, 
 
 	var savePerYear = ((fixedYearlyIncome / Math.pow(rateRetireReturn, (retireYears - 1)) * 1 - Math.pow(rateRetireReturn, retireYears) / 1 - rateRetireReturn) - (fixedCurrent * Math.pow(rateWorkReturn, workingYears))) * ( 1 - rateWorkReturn / 1 - Math.pow(rateWorkReturn, workingYears));
 	var fixedSavePerYear = parseFloat(savePerYear).toFixed(2);
-	document.getElementById("answers").innerHTML += "You have to save $"+fixedSavePerYear+" per year.";
+	document.getElementById("answers").innerHTML += "You have to save $"+fixedSavePerYear+" per year.\</br>";
 
 	var totalYears = workingYears + retireYears;
-
+	document.getElementById("answers").innerHTML += "Below is a schedule of your savings for "+scenarioName+"\</br>"
 
 	//create a table so that we have a place to display the earnings as they increment by year
-	document.getElementById("answers").innerHTML += "<table><th><td>Year</td><td>Savings Total</td></th>"
+	document.getElementById("answers").innerHTML += '<table><th><td>Year</td><td>Savings Total</td></th>'
 	//now let's make a loop for the years we have left
 
 	for(var i = 1; i <= totalYears; i++ ){
@@ -173,8 +173,10 @@ function calculate(lifeExpectancy, expectedRA, current, birthYear, currentYear, 
 		//variable to determine how much we'll have in savings each year
 		var calculatedSavings = parseFloat(fixedSavePerYear * i).toFixed(2);
 
-		document.getElementById("answers").innerHTML += "<tr><td>Year "+i+"</td> <td>"+calculatedSavings+"</td></tr>\</br>";
+		document.getElementById("answers").innerHTML += '<tr><td> Year '+i+'</td> <td>'+calculatedSavings+"</td></tr>\</br>";
 		//fixedSavePerYear += fixedSavePerYear;
 	}
 
+	//close our table
+	document.getElementById("answers").innerHTML += "</table>";
 }
