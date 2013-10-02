@@ -135,17 +135,43 @@ function basicInput(){
 
 function calculate(lifeExpectancy, expectedRA, current, birthYear, currentYear, workReturn, retireReturn, yearlyIncome){
 
-	var workingYears = expectedRA - (currentYear - birthYear);
-	var retireYears = lifeExpectancy - expectedRA;
+	//let's go ahead and make sure the variables we brought in are numbers
+	var fixedExpectedRA = parseFloat(expectedRA);
+	var fixedLife = parseFloat(lifeExpectancy);
+	var fixedCurrent = parseFloat(current);
+	var fixedBirthYear = parseFloat(birthYear);
+	var fixedCurrentYear = parseFloat(currentYear);
+	var fixedYearlyIncome = parseFloat(yearlyIncome);
+	var fixedWorkRate = parseFloat(workReturn);
+	var fixedRetireRate = parseFloat(retireReturn)
 
 
+	//creating some variables to make writing the formula a little easier
+	var workingYears = fixedExpectedRA - (fixedCurrentYear - fixedBirthYear);
+	var retireYears = fixedLife - fixedExpectedRA;
+	var adding = 1.0;
+	var rateWorkReturn = fixedWorkRate + adding;
+	var rateRetireReturn = fixedRetireRate + adding;
 
-	//we have the yearly retirement income and initial amount of savings from the other functions
-	//so...
 
-	var savePerYear = ((((yearlyIncome/(1 + retireReturn)(Math.pow(retireYears-1))) * 1 - ((1 + retireReturn))(Math.pow(retireYears))/1 - (1 + retireReturn))) -
-		(current * (1 + workReturn)(Math.pow(workingYears))) * ( (1 - (1 + workReturn))/(1 - (1 + workReturn))(Math.pow(workingYears))));
+	//we have the yearly retirement income and initial amount of savings from the other functions. breaking this down into parts...
+	
 
-	document.getElementById("answers").innerHTML += "You have to save "+savePerYear+" per year.";
+	var savePerYear = ((fixedYearlyIncome / Math.pow(rateRetireReturn, (retireYears - 1)) * 1 - Math.pow(rateRetireReturn, retireYears) / 1 - rateRetireReturn) - (fixedCurrent * Math.pow(rateWorkReturn, workingYears))) * ( 1 - rateWorkReturn / 1 - Math.pow(rateWorkReturn, workingYears));
+	var fixedSavePerYear = parseFloat(savePerYear).toFixed(2);
+	document.getElementById("answers").innerHTML += "You have to save $"+fixedSavePerYear+" per year.";
+
+	var totalYears = workingYears + retireYears;
+
+
+	//create a table so that we have a place to display the earnings as they increment by year
+	document.getElementById("answers").innerHTML += "<table><th><td>Year</td><td>Savings Total</td></th>"
+	//now let's make a loop for the years we have left
+	
+	for(var i = 1; i <= totalYears; i++ ){
+
+		document.getElementById("answers").innerHTML += "<tr><td>Year "+i+"</td> <td>"+fixedSavePerYear+"</td></tr>\</br>";
+		//fixedSavePerYear += fixedSavePerYear;
+	}
 
 }
