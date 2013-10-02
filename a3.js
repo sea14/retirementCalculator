@@ -25,7 +25,7 @@ function basicInput(){
 	}else{
 
 		document.getElementById('errors').innerHTML += 'Please provide a positive birth year that is in the past.\</br>';
-		var greaterNum = 0;
+		clearErrors();
 
 	}
 
@@ -34,13 +34,18 @@ function basicInput(){
 	var savingsValue = document.getElementById("current").value;
 
 	//use isNaN function
-	if(isNaN(savingsValue) || savingsValue==""){
+	if(savingsValue==""){
+
+		document.getElementById('errors').innerHTML += 'Please enter a number for your savings.\</br>';
+
+	}else if( isNaN(savingsValue) ){
 
 		document.getElementById('errors').innerHTML += 'Please enter a number for your savings.\</br>';
 
 	}else{
 
 		this.current = document.getElementById("current").value;
+		clearErrors();
 
 	}
 
@@ -59,6 +64,7 @@ function basicInput(){
 	}else{
 
 		this.expectedRA = document.getElementById("expectedRA").value;
+		clearErrors();
 
 	}
 
@@ -87,6 +93,7 @@ function basicInput(){
 	}else{
 
 		this.lifeExpectancy = document.getElementById("lifeExpectancy").value;
+		clearErrors();
 
 	}
 
@@ -102,6 +109,7 @@ function basicInput(){
 		document.getElementById('errors').innerHTML += 'Please provide valid scenario name that is not composed of whitespace.\</br>';
 	}else{
 		this.scenarioName = document.getElementById("scenarioName").value;
+		clearErrors();
 	}
 
 
@@ -110,12 +118,14 @@ function basicInput(){
 		document.getElementById('errors').innerHTML += 'Please enter a work rate greater than 0.\</br>';
 	}else{
 		this.workReturn = document.getElementById("work").value;
+		clearErrors();
 	}
 
 	if(document.getElementById("retire").value <= 0){
 		document.getElementById('errors').innerHTML += 'Please enter a retirement rate greater than 0.\</br>';
 	}else{
 		this.retireReturn = document.getElementById("retire").value;
+		clearErrors();
 	}
 
 
@@ -124,6 +134,8 @@ function basicInput(){
 		document.getElementById('errors').innerHTML += 'Please enter a positive yearly income.\</br>';
 	}else{
 		this.yearlyIncome = document.getElementById("yearly").value;
+		clearErrors();
+
 	}
 
 	//call the calculate function and pass all the variables we got out of this one
@@ -179,4 +191,13 @@ function calculate(lifeExpectancy, expectedRA, current, birthYear, currentYear, 
 
 	//close our table
 	document.getElementById("answers").innerHTML += "</table>";
+}
+
+//a function for clearing errors
+
+function clearErrors(){
+
+
+	document.getElementById("errors").innerHTML = "";
+
 }
