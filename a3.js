@@ -9,42 +9,50 @@ When the user clicks calculate, we run this function.*/
 function basicInput(){
 
 	//we'll need the current year for other operations later on
-	var currentYear = new Date().getFullYear();
+	var currentYear = parseFloat(new Date().getFullYear());
 
-
+	//make the birth year we get from user input into a number
+	birthYear = parseFloat(document.getElementById("birthYear").value);
+	console.log("this is birthyear: "+birthYear);
 	//check that birth year is positive
-	if(document.getElementById("birthYear").value>0){
+	if(birthYear > 0){
+	//check that birth year is in the past
+		if(birthYear < currentYear){	
 
-		//check that birth year is in the past
-		if(document.getElementById("birthYear").value < currentYear){	
+			this.birthYear = birthYear;
 
-			this.birthYear = document.getElementById("birthYear").value;
+		}else if(birthYear > currentYear){
+
+			document.getElementById('errors').innerHTML += 'Please provide a birth year that is in the past.\</br>';
 
 		}
-	}else{
+	}else if(birthYear == ""){
 
 		document.getElementById('errors').innerHTML += 'Please provide a positive birth year that is in the past.\</br>';
 		
+	}else if(isNaN(birthYear)){
+
+		document.getElementById('errors').innerHTML += 'Please provide a numerical birth year.\</br>';
 
 	}
 
 
+
 	//check that current savings are a number
-	var savingsValue = document.getElementById("current").value;
+	var current = parseFloat(document.getElementById("current").value);
 
 	//use isNaN function
-	if(savingsValue==""){
+	if(current==""){
 
 		document.getElementById('errors').innerHTML += 'Please enter a number for your savings.\</br>';
 
-	}else if( isNaN(savingsValue) ){
+	}else if( isNaN(current) ){
 
 		document.getElementById('errors').innerHTML += 'Please enter a number for your savings.\</br>';
 
 	}else{
 
-		this.current = document.getElementById("current").value;
-		
+		this.current = current;
 
 	}
 
@@ -62,14 +70,13 @@ function basicInput(){
 
 	}else{
 
-		this.expectedRA = document.getElementById("expectedRA").value;
-		
+		this.retireAge = document.getElementById("expectedRA").value;
 
 	}
 
 	//check that life expectancy is a number and that it is in the future
 	//beyond the expected retirement age
-	var life = document.getElementById("lifeExpectancy").value;
+	var life = parseFloat(document.getElementById("lifeExpectancy").value);
 
 	//use is NaN, then check to see if it's greater than retirement age
 	if(isNaN(life)){
@@ -93,7 +100,7 @@ function basicInput(){
 
 	}else{
 
-		this.lifeExpectancy = document.getElementById("lifeExpectancy").value;
+		this.life = life;
 	
 
 	}
@@ -108,89 +115,93 @@ function basicInput(){
 	//check to see if we have a scenario name and it isn't composed of whitespace
 	if(document.getElementById("scenarioName").value==""){
 		document.getElementById('errors').innerHTML += 'Please provide valid scenario name that is not composed of whitespace.\</br>';
+		
 	}else{
 		this.scenarioName = document.getElementById("scenarioName").value;
 		
 	}
 
 
+	var work = parseFloat(document.getElementById("work").value);
 	//now we check the rates of return to make sure they're greater than 0
-	if(document.getElementById("work").value<=0){
+	if(work<=0){
 		document.getElementById('errors').innerHTML += 'Please enter a work rate greater than 0.\</br>';
+		
 	}else{
-		this.workReturn = document.getElementById("work").value;
+		this.work = work;
 		
 	}
 
+	var retire = parseFloat(document.getElementById("work").value);
 	if(document.getElementById("retire").value <= 0){
 		document.getElementById('errors').innerHTML += 'Please enter a retirement rate greater than 0.\</br>';
+		
 	}else{
-		this.retireReturn = document.getElementById("retire").value;
+		this.retire = retire;
 		
 	}
 
 
 	//now we check that the desired yearly income is a positive value
-	if(document.getElementById("yearly").value<=0){
+	var yearlyIncome = parseFloat(document.getElementById("yearly").value);
+	if(yearlyIncome<=0){
 		document.getElementById('errors').innerHTML += 'Please enter a positive yearly income.\</br>';
-	}else{
-		this.yearlyIncome = document.getElementById("yearly").value;
 		
-
+	}else{
+		this.yearlyIncome = yearlyIncome;
 	}
 
 	//call the calculate function and pass all the variables we got out of this one
-	calculate(lifeExpectancy, expectedRA, current, birthYear, currentYear, workReturn, retireReturn, yearlyIncome);
+	calculate(birthYear, current, retireAge, life, work, retire, yearlyIncome, scenarioName, currentYear);
 
 }
 
 //here's our fun little formula
 
-function calculate(lifeExpectancy, expectedRA, current, birthYear, currentYear, workReturn, retireReturn, yearlyIncome){
-
-	//let's go ahead and make sure the variables we brought in are numbers
-	var fixedExpectedRA = parseFloat(expectedRA);
-	var fixedLife = parseFloat(lifeExpectancy);
-	var fixedCurrent = parseFloat(current);
-	var fixedBirthYear = parseFloat(birthYear);
-	var fixedCurrentYear = parseFloat(currentYear);
-	var fixedYearlyIncome = parseFloat(yearlyIncome);
-	var fixedWorkRate = parseFloat(workReturn);
-	var fixedRetireRate = parseFloat(retireReturn);
-
+function calculate(birthYear, current, retireAge, life, work, retire, yearlyIncome, scenarioName, currentYear){
 
 	//creating some variables to make writing the formula a little easier
-	var workingYears = fixedExpectedRA - (fixedCurrentYear - fixedBirthYear);
-	var retireYears = fixedLife - fixedExpectedRA;
+	var workingYears = retireAge - (currentYear - birthYear);
+	var retireYears =  life - retireAge;
 	var adding = 1.0;
-	var rateWorkReturn = fixedWorkRate + adding;
-	var rateRetireReturn = fixedRetireRate + adding;
+	var rateWorkReturn = work + adding;
+	var rateRetireReturn = retire + adding;
 
 
-	//we have the yearly retirement income and initial amount of savings from the other functions. breaking this down into parts...
+	//full-fledged formula in all its glory
+	var savePerYear = ((yearlyIncome / Math.pow(rateRetireReturn, (retireYears - 1)) * 1 - Math.pow(rateRetireReturn, retireYears) / 1 - rateRetireReturn)
+	 - (current * Math.pow(rateWorkReturn, workingYears))) * ( 1 - rateWorkReturn / 1 - Math.pow(rateWorkReturn, workingYears));
+	
 
-
-	var savePerYear = ((fixedYearlyIncome / Math.pow(rateRetireReturn, (retireYears - 1)) * 1 - Math.pow(rateRetireReturn, retireYears) / 1 - rateRetireReturn) - (fixedCurrent * Math.pow(rateWorkReturn, workingYears))) * ( 1 - rateWorkReturn / 1 - Math.pow(rateWorkReturn, workingYears));
+	//now that we've done that...
+	//let's trim savePerYear some, get rid of multitude of decimal places
 	var fixedSavePerYear = parseFloat(savePerYear).toFixed(2);
-	document.getElementById("answers").innerHTML += "You have to save $"+fixedSavePerYear+" per year.\</br>";
+
 
 	var totalYears = workingYears + retireYears;
-	document.getElementById("answers").innerHTML += "Below is a schedule of your savings for "+scenarioName+"\</br>"
+	
 
-	//create a table so that we have a place to display the earnings as they increment by year
-	document.getElementById("answers").innerHTML += '<table><th><td>Year</td><td>Savings Total</td></th>'
 	//now let's make a loop for the years we have left
 
 	//let's clear out the errors from earlier
 	clearErrors();
 
-	for(var i = 1; i <= totalYears; i++ ){
+	for(var i = 1; i <= totalYears; i++){
 
+		//create a table so that we have a place to display the earnings as they increment by year
+		document.getElementById("answers").innerHTML += '<table><th><td>Year</td><td>Savings Total</td></th>'
+
+		if(isNaN(savePerYear)){
+
+			break;
+
+		}else{
 		//variable to determine how much we'll have in savings each year
 		var calculatedSavings = parseFloat(fixedSavePerYear * i).toFixed(2);
 
 		document.getElementById("answers").innerHTML += '<tr><td> Year '+i+'</td> <td>'+calculatedSavings+"</td></tr>\</br>";
 		//fixedSavePerYear += fixedSavePerYear;
+		}
 	}
 
 	//close our table
@@ -201,7 +212,12 @@ function calculate(lifeExpectancy, expectedRA, current, birthYear, currentYear, 
 
 function clearErrors(){
 
+	var remover = document.getElementById("errors");
 
-	document.getElementById("errors").innerHTML = "";
+	for(var x = remover.length; x++){
+
+		remover[x].parentNode.removeChild(remover[x]);
+
+	}
 
 }
