@@ -25,7 +25,7 @@ function basicInput(){
 	}else{
 
 		document.getElementById('errors').innerHTML += 'Please provide a positive birth year that is in the past.\</br>';
-		clearErrors();
+		
 
 	}
 
@@ -45,7 +45,7 @@ function basicInput(){
 	}else{
 
 		this.current = document.getElementById("current").value;
-		clearErrors();
+		
 
 	}
 
@@ -53,7 +53,7 @@ function basicInput(){
 	//check that the expected retirement age is a number and is in the future
 	//we subtract the current year from the user's year of birth to get the number
 	//that the user must have a retirement age greater than
-	var retireAge = document.getElementById("expectedRA").value;
+	var retireAge = parseFloat(document.getElementById("expectedRA").value);
 	var testNumber = currentYear - birthYear;
 
 	//use isNaN function first and check that retireAge is greater than the testing number
@@ -64,7 +64,7 @@ function basicInput(){
 	}else{
 
 		this.expectedRA = document.getElementById("expectedRA").value;
-		clearErrors();
+		
 
 	}
 
@@ -78,11 +78,13 @@ function basicInput(){
 		document.getElementById('errors').innerHTML += 'Please provide a life expectancy that is a number.\</br>';
 
 
-	}else if(retireAge < life){
+	}else if(retireAge > life){
 
 
 		document.getElementById('errors').innerHTML += 'Please provide a life expectancy in the future that is beyond your expected retirement age.\</br>';
-
+		document.getElementById('errors').innerHTML += 'The error is with retireAge\</br>';
+		document.getElementById('errors').innerHTML += 'retireAge is '+retireAge+'\</br>';
+		document.getElementById('errors').innerHTML += 'life is '+life+'\</br>';
 
 	}else if(life < testNumber){
 
@@ -93,7 +95,7 @@ function basicInput(){
 	}else{
 
 		this.lifeExpectancy = document.getElementById("lifeExpectancy").value;
-		clearErrors();
+	
 
 	}
 
@@ -109,7 +111,7 @@ function basicInput(){
 		document.getElementById('errors').innerHTML += 'Please provide valid scenario name that is not composed of whitespace.\</br>';
 	}else{
 		this.scenarioName = document.getElementById("scenarioName").value;
-		clearErrors();
+		
 	}
 
 
@@ -118,14 +120,14 @@ function basicInput(){
 		document.getElementById('errors').innerHTML += 'Please enter a work rate greater than 0.\</br>';
 	}else{
 		this.workReturn = document.getElementById("work").value;
-		clearErrors();
+		
 	}
 
 	if(document.getElementById("retire").value <= 0){
 		document.getElementById('errors').innerHTML += 'Please enter a retirement rate greater than 0.\</br>';
 	}else{
 		this.retireReturn = document.getElementById("retire").value;
-		clearErrors();
+		
 	}
 
 
@@ -134,7 +136,7 @@ function basicInput(){
 		document.getElementById('errors').innerHTML += 'Please enter a positive yearly income.\</br>';
 	}else{
 		this.yearlyIncome = document.getElementById("yearly").value;
-		clearErrors();
+		
 
 	}
 
@@ -155,7 +157,7 @@ function calculate(lifeExpectancy, expectedRA, current, birthYear, currentYear, 
 	var fixedCurrentYear = parseFloat(currentYear);
 	var fixedYearlyIncome = parseFloat(yearlyIncome);
 	var fixedWorkRate = parseFloat(workReturn);
-	var fixedRetireRate = parseFloat(retireReturn)
+	var fixedRetireRate = parseFloat(retireReturn);
 
 
 	//creating some variables to make writing the formula a little easier
