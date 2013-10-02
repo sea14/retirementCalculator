@@ -9,25 +9,33 @@ When the user clicks calculate, we run this function.*/
 function basicInput(){
 
 	//we'll need the current year for other operations later on
-	var currentYear = new Date().getFullYear();
+	var currentYear = parseFloat(new Date().getFullYear());
 
 	//make the birth year we get from user input into a number
 	birthYear = parseFloat(document.getElementById("birthYear").value);
-
+	console.log("this is birthyear: "+birthYear);
 	//check that birth year is positive
 	if(birthYear > 0){
-
-		//check that birth year is in the past
+	//check that birth year is in the past
 		if(birthYear < currentYear){	
 
 			this.birthYear = birthYear;
 
+		}else if(birthYear > currentYear){
+
+			document.getElementById('errors').innerHTML += 'Please provide a birth year that is in the past.\</br>';
+
 		}
-	}else{
+	}else if(birthYear == ""){
 
 		document.getElementById('errors').innerHTML += 'Please provide a positive birth year that is in the past.\</br>';
 		
+	}else if(isNaN(birthYear)){
+
+		document.getElementById('errors').innerHTML += 'Please provide a numerical birth year.\</br>';
+
 	}
+
 
 
 	//check that current savings are a number
@@ -107,6 +115,7 @@ function basicInput(){
 	//check to see if we have a scenario name and it isn't composed of whitespace
 	if(document.getElementById("scenarioName").value==""){
 		document.getElementById('errors').innerHTML += 'Please provide valid scenario name that is not composed of whitespace.\</br>';
+		
 	}else{
 		this.scenarioName = document.getElementById("scenarioName").value;
 		
@@ -117,6 +126,7 @@ function basicInput(){
 	//now we check the rates of return to make sure they're greater than 0
 	if(work<=0){
 		document.getElementById('errors').innerHTML += 'Please enter a work rate greater than 0.\</br>';
+		
 	}else{
 		this.work = work;
 		
@@ -125,6 +135,7 @@ function basicInput(){
 	var retire = parseFloat(document.getElementById("work").value);
 	if(document.getElementById("retire").value <= 0){
 		document.getElementById('errors').innerHTML += 'Please enter a retirement rate greater than 0.\</br>';
+		
 	}else{
 		this.retire = retire;
 		
@@ -135,6 +146,7 @@ function basicInput(){
 	var yearlyIncome = parseFloat(document.getElementById("yearly").value);
 	if(yearlyIncome<=0){
 		document.getElementById('errors').innerHTML += 'Please enter a positive yearly income.\</br>';
+		
 	}else{
 		this.yearlyIncome = yearlyIncome;
 	}
@@ -164,25 +176,32 @@ function calculate(birthYear, current, retireAge, life, work, retire, yearlyInco
 	//now that we've done that...
 	//let's trim savePerYear some, get rid of multitude of decimal places
 	var fixedSavePerYear = parseFloat(savePerYear).toFixed(2);
-	document.getElementById("answers").innerHTML += "You have to save $"+fixedSavePerYear+" per year.\</br>";
+
 
 	var totalYears = workingYears + retireYears;
-	document.getElementById("answers").innerHTML += "Below is a schedule of your savings for "+scenarioName+"\</br>"
+	
 
-	//create a table so that we have a place to display the earnings as they increment by year
-	document.getElementById("answers").innerHTML += '<table><th><td>Year</td><td>Savings Total</td></th>'
 	//now let's make a loop for the years we have left
 
 	//let's clear out the errors from earlier
 	clearErrors();
 
-	for(var i = 1; i <= totalYears; i++ ){
+	for(var i = 1; i <= totalYears; i++){
 
+		//create a table so that we have a place to display the earnings as they increment by year
+		document.getElementById("answers").innerHTML += '<table><th><td>Year</td><td>Savings Total</td></th>'
+
+		if(isNaN(savePerYear)){
+
+			break;
+
+		}else{
 		//variable to determine how much we'll have in savings each year
 		var calculatedSavings = parseFloat(fixedSavePerYear * i).toFixed(2);
 
 		document.getElementById("answers").innerHTML += '<tr><td> Year '+i+'</td> <td>'+calculatedSavings+"</td></tr>\</br>";
 		//fixedSavePerYear += fixedSavePerYear;
+		}
 	}
 
 	//close our table
@@ -193,7 +212,12 @@ function calculate(birthYear, current, retireAge, life, work, retire, yearlyInco
 
 function clearErrors(){
 
+	var remover = document.getElementById("errors");
 
-	document.getElementById("errors").innerHTML = "";
+	for(var x = remover.length; x++){
+
+		remover[x].parentNode.removeChild(remover[x]);
+
+	}
 
 }
