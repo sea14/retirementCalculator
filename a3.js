@@ -2,8 +2,7 @@
  * a3 is a JavaScript Retirement Calculator*/
 
 /*we need to ask the user for year of birth, current savings,
- expected retirement age, and life expectancy.
-This user's input becomes our "basic" object class.
+ expected retirement age, and life expectancy, plus scenario info.
 When the user clicks calculate, we run this function.*/
 
 function basicInput(){
@@ -35,7 +34,6 @@ function basicInput(){
 		document.getElementById('errors').innerHTML += 'Please provide a numerical birth year.\</br>';
 
 	}
-
 
 
 	//check that current savings are a number
@@ -102,14 +100,12 @@ function basicInput(){
 
 		this.life = life;
 	
-
 	}
 
 
-
-/*we also want to get user input about a scenario--its name, rate of investment return
- * while the user is working, their investment rate while retired, and their
- * desired retirement yearly income*/
+	/*we also want to get user input about a scenario--its name, rate of investment return
+ 	* while the user is working, their investment rate while retired, and their
+ 	* desired retirement yearly income*/
 
 
 	//check to see if we have a scenario name and it isn't composed of whitespace
@@ -167,29 +163,26 @@ function calculate(birthYear, current, retireAge, life, work, retire, yearlyInco
 	var rateWorkReturn = work + adding;
 	var rateRetireReturn = retire + adding;
 
+	var minusOne = retireYears - 1;
 
-	//full-fledged formula in all its glory
-	var savePerYear = ((yearlyIncome / Math.pow(rateRetireReturn, (retireYears - 1)) * 1 - Math.pow(rateRetireReturn, retireYears) / 1 - rateRetireReturn)
-	 - (current * Math.pow(rateWorkReturn, workingYears))) * ( 1 - rateWorkReturn / 1 - Math.pow(rateWorkReturn, workingYears));
-	
+	//full-fledged formula
+	var savePerYear = ( ( yearlyIncome/(Math.pow(rateRetireReturn, minusOne))	* (1 - Math.pow(rateRetireReturn, retireYears)) / (1 - rateRetireReturn) ) ) - (current * Math.pow(rateWorkReturn, workingYears)) * ( (1 - rateWorkReturn) / (1 - Math.pow(rateWorkReturn, workingYears)) );  
+
+
 
 	//now that we've done that...
 	//let's trim savePerYear some, get rid of multitude of decimal places
 	var fixedSavePerYear = parseFloat(savePerYear).toFixed(2);
-
-
-	var totalYears = workingYears + retireYears;
 	
-
-	//now let's make a loop for the years we have left
 
 	//let's clear out the errors from earlier
 	clearErrors();
 
+	//create a table so that we have a place to display the earnings as they increment by year
+	document.getElementById("answers").innerHTML += '<table><th><td>Year</td><td>Savings Total</td></th>';
+	//we need to know the total number of years they'll be saving for our loop to run
+	var totalYears = workingYears + retireYears;
 	for(var i = 1; i <= totalYears; i++){
-
-		//create a table so that we have a place to display the earnings as they increment by year
-		document.getElementById("answers").innerHTML += '<table><th><td>Year</td><td>Savings Total</td></th>'
 
 		if(isNaN(savePerYear)){
 
@@ -213,8 +206,7 @@ function calculate(birthYear, current, retireAge, life, work, retire, yearlyInco
 function clearErrors(){
 
 	var remover = document.getElementById("errors");
-
-	for(var x = remover.length; x++){
+	for(var x = remover.length; x++;){
 
 		remover[x].parentNode.removeChild(remover[x]);
 
