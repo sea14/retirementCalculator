@@ -114,7 +114,6 @@ function basicInput(){
 		
 	}else{
 		this.scenarioName = document.getElementById("scenarioName").value;
-		
 	}
 
 
@@ -125,7 +124,6 @@ function basicInput(){
 		
 	}else{
 		this.work = work;
-		
 	}
 
 	var retire = parseFloat(document.getElementById("retire").value);
@@ -134,7 +132,6 @@ function basicInput(){
 		
 	}else{
 		this.retire = retire;
-		
 	}
 
 
@@ -178,29 +175,20 @@ function calculate(birthYear, current, retireAge, life, work, retire, yearlyInco
 	var partD = ( (1 - rateWorkReturn) / (1 - rToN));
 
 
-
 	//full-fledged formula
 	var savePerYear = ((partA * partB) - (partC)) * (partD);
-	document.getElementById("answers").innerHTML += 'I am I '+current+'\</br>';
-	document.getElementById("answers").innerHTML += 'I am T '+yearlyIncome+'\</br>';
-	document.getElementById("answers").innerHTML += 'I am r '+rateWorkReturn+'\</br>';
-	document.getElementById("answers").innerHTML += 'I am g '+rateRetireReturn+'\</br>';
-	document.getElementById("answers").innerHTML += 'I am n '+workingYears+'\</br>';
-	document.getElementById("answers").innerHTML += 'I am m '+retireYears+'\</br>';
-
-
-
-
 	//now that we've done that...
 	//let's trim savePerYear some, get rid of multitude of decimal places
 	var fixedSavePerYear = parseFloat(savePerYear).toFixed(2);
 	
 
-	//let's clear out the errors from earlier
+	//let's clear out any errors from earlier
 	clearErrors();
 
-	//create a table so that we have a place to display the earnings as they increment by year
-	document.getElementById("answers").innerHTML += '<table><th><td>Year</td><td>Savings Total</td></th>';
+	//create a space where we'll see the results year by year. could be prettier
+	document.getElementById("answers").innerHTML += '<p>Your Scenario is called '+scenarioName+'\</br>';
+	document.getElementById("answers").innerHTML += '<table>';
+	document.getElementById("answers").innerHTML += '<th><td>Year</td><td> Total Savings</td></th>\</br>';
 	//we need to know the total number of years they'll be saving for our loop to run
 	var totalYears = workingYears + retireYears;
 	for(var i = 1; i <= totalYears; i++){
@@ -212,14 +200,14 @@ function calculate(birthYear, current, retireAge, life, work, retire, yearlyInco
 		}else{
 		//variable to determine how much we'll have in savings each year
 		var calculatedSavings = parseFloat(fixedSavePerYear * i).toFixed(2);
+		document.getElementById("answers").innerHTML += '<tr><td>Year '+i+':</td> <td>'+calculatedSavings+"</td></tr>\</br>";
 
-		document.getElementById("answers").innerHTML += '<tr><td> Year '+i+'</td> <td>'+calculatedSavings+"</td></tr>\</br>";
 		//fixedSavePerYear += fixedSavePerYear;
 		}
 	}
 
 	//close our table
-	document.getElementById("answers").innerHTML += "</table>";
+	
 }
 
 //a function for clearing errors

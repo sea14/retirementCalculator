@@ -1,13 +1,9 @@
-tr{
+
+th, td{
 
 	border: 1px solid #000;
-
 }
-table{
 
-	border: 1px solid #000;
-
-}
 #errors{
 
 	color: #FF0000;
