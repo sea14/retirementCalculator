@@ -128,7 +128,7 @@ function basicInput(){
 		
 	}
 
-	var retire = parseFloat(document.getElementById("work").value);
+	var retire = parseFloat(document.getElementById("retire").value);
 	if(document.getElementById("retire").value <= 0){
 		document.getElementById('errors').innerHTML += 'Please enter a retirement rate greater than 0.\</br>';
 		
@@ -165,8 +165,29 @@ function calculate(birthYear, current, retireAge, life, work, retire, yearlyInco
 
 	var minusOne = retireYears - 1;
 
+	//taking care of the powers so that they don't have to be done mid-formula
+	gToA = Math.pow(rateRetireReturn, minusOne);
+	gToM = Math.pow(rateRetireReturn, retireYears);
+	rToN = Math.pow(rateWorkReturn, workingYears);
+
+
+	//breaking parts of the formula down
+	var partA = (yearlyIncome / gToA);
+	var partB = ((1 - gToM) / (1 - rateRetireReturn));
+	var partC = (current * rToN);
+	var partD = ( (1 - rateWorkReturn) / (1 - rToN));
+
+
+
 	//full-fledged formula
-	var savePerYear = ( ( yearlyIncome/(Math.pow(rateRetireReturn, minusOne))	* (1 - Math.pow(rateRetireReturn, retireYears)) / (1 - rateRetireReturn) ) ) - (current * Math.pow(rateWorkReturn, workingYears)) * ( (1 - rateWorkReturn) / (1 - Math.pow(rateWorkReturn, workingYears)) );  
+	var savePerYear = ((partA * partB) - (partC)) * (partD);
+	document.getElementById("answers").innerHTML += 'I am I '+current+'\</br>';
+	document.getElementById("answers").innerHTML += 'I am T '+yearlyIncome+'\</br>';
+	document.getElementById("answers").innerHTML += 'I am r '+rateWorkReturn+'\</br>';
+	document.getElementById("answers").innerHTML += 'I am g '+rateRetireReturn+'\</br>';
+	document.getElementById("answers").innerHTML += 'I am n '+workingYears+'\</br>';
+	document.getElementById("answers").innerHTML += 'I am m '+retireYears+'\</br>';
+
 
 
 
