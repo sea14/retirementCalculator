@@ -188,7 +188,7 @@ function calculate(birthYear, current, retireAge, life, work, retire, yearlyInco
 	//create a space where we'll see the results year by year. could be prettier
 	document.getElementById("answers").innerHTML += '<p>Your Scenario is called '+scenarioName+'\</br>';
 	document.getElementById("answers").innerHTML += '<table>';
-	document.getElementById("answers").innerHTML += '<th><td>Year</td><td> Total Savings</td></th>\</br>';
+	document.getElementById("answers").innerHTML += '<th><td>Year | </td><td> Total Savings</td></th>\</br>';
 	//we need to know the total number of years they'll be saving for our loop to run
 	var totalYears = workingYears + retireYears;
 	for(var i = 1; i <= totalYears; i++){
